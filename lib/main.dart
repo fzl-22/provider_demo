@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:provider_demo/providers/counter_provider.dart';
 import 'package:provider_demo/screens/home_screen.dart';
 
 void main() {
@@ -18,7 +20,10 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: HomeScreen.path,
       routes: {
-        HomeScreen.path: (context) => const HomeScreen(title: 'Provider Demo'),
+        HomeScreen.path: (context) => ChangeNotifierProvider(
+              create: (context) => CounterProvider(),
+              child: const HomeScreen(title: 'Provider Demo'),
+            ),
       },
     );
   }
