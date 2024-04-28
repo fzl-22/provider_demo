@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider_demo/providers/counter_provider.dart';
+import 'package:provider_demo/providers/title_provider.dart';
+import 'package:provider_demo/screens/edit_title_screen.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key, required this.title});
-
-  final String title;
+  const HomeScreen({super.key});
 
   static const path = '/home';
 
@@ -16,7 +16,20 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(title),
+        title: Selector<TitleProvider, String>(
+          builder: (context, title, child) {
+            return Text(title);
+          },
+          selector: (context, provider) => provider.title,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, EditTitleScreen.path);
+            },
+            child: const Text('Edit Title'),
+          ),
+        ],
       ),
       body: Center(
         child: Column(
@@ -82,12 +95,14 @@ class HomeScreen extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           FloatingActionButton(
+            heroTag: 'increment',
             onPressed: () => context.read<CounterProvider>().incrementCounter(),
             tooltip: 'Increment',
             child: const Icon(Icons.add),
           ),
           const SizedBox(height: 8),
           FloatingActionButton(
+            heroTag: 'decrement',
             onPressed: () => context.read<CounterProvider>().decrementCounter(),
             tooltip: 'Increment',
             child: const Icon(Icons.remove),
